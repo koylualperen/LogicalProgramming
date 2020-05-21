@@ -121,33 +121,73 @@ ogrenciDers('100040003', 'CE401', 85).
 
 
 secmeliDersAl(NUMARA, DERSKODU):-
-    bolumEslestir(NUMARA, DERSKODU, OGRBOLUM, SDERSBOLUM),
-    write('Ogrenci-Ders Bolum Eslesmesi: '),  write('-------------- Eslesme: '), (OGRBOLUM = SDERSBOLUM -> writeln('Var') ; writeln('Yok')), OGRBOLUM = SDERSBOLUM,
-
     gecmisNot(NUMARA, DERSKODU, NOT),
-    write('Ogrencinin Gecmis Ders Bilgileri: '),  write('---------- '), (NOT == -1 -> writeln('Ogrenci Dersi Ilk Defa Aliyor') ; (NOT >= 50 -> writeln('Ogrenci Dersten Gecti') ; writeln('Ogrenci Dersten Kaldi'), retract(ogrenciDers(NUMARA, DERSKODU, _)))),
+    write('Ogrencinin Gecmis Ders Bilgileri: '),
+    write('---------- '), (NOT == -1 -> writeln('Ogrenci Dersi Ilk Defa Aliyor') ; write('Onceki Notu: '), write(NOT), (NOT >= 50 -> writeln(', Ogrenci Dersten Gecti') ; writeln(', Ogrenci Dersten Kaldi'), retract(ogrenciDers(NUMARA, DERSKODU, _)))),
     not(NOT >= 50),
 
     ortalamaBul(NUMARA, GNO),
-    write('Ogrencinin Genel Not Ortalamasi: '), write(GNO), write(' -------- Ortalama: '), (GNO >= 50 -> writeln('Yeterli') ; writeln('Yetersiz')), GNO >= 50,
+    write('Ogrencinin Genel Not Ortalamasi: '),write(GNO),
+    write(' -------- Ortalama: '), (GNO >= 50 -> writeln('Yeterli') ; writeln('Yetersiz')),
+    GNO >= 50,
 
     kayitliOgrenciSayisi(DERSKODU, KAYITLIOGRENCI),
-    write('Dersi Alan Ogrenci Sayisi: '), write(KAYITLIOGRENCI), write(' --------------- Kontenjan: '), (KAYITLIOGRENCI < 5 -> writeln('Var') ; writeln('Yok')), KAYITLIOGRENCI < 5,
+    write('Dersi Alan Ogrenci Sayisi: '), write(KAYITLIOGRENCI),
+    write(' --------------- Kontenjan: '), (KAYITLIOGRENCI < 5 -> writeln('Var') ; writeln('Yok')),
+    KAYITLIOGRENCI < 5,
 
     aldigiDersSayisi(NUMARA, DERSSAYISI),
-    write('Ogrencinin Aldigi Secmeli Ders Sayisi: '), write(DERSSAYISI), write(' --- Program: '), (DERSSAYISI < 2 -> writeln('Bos') ; writeln('Dolu')), DERSSAYISI < 2,
+    write('Ogrencinin Aldigi Secmeli Ders Sayisi: '), write(DERSSAYISI),
+    write(' --- Program: '), (DERSSAYISI < 2 -> writeln('Bos') ; writeln('Dolu')),
+    DERSSAYISI < 2,
 
+    %write('Ogrenci Notunu Giriniz: '),
+    %read(PUAN),
+    %assertz(ogrenciDers(NUMARA,DERSKODU,PUAN)),
     assertz(ogrenciDers(NUMARA,DERSKODU,0)),
     writeln('Ders Alindi.').
 
+    
+secmeliDersAlBONUS(NUMARA, DERSKODU):-
+    kendiBolumundenDersSayisi(NUMARA, DERSKODU, KACTANE),
+    write('Bonus Kuralin Saglanmasi: '),
+    write('---------- '), (KACTANE < 1 -> writeln('Kosul Saglandi'); writeln('Kosul Saglanmadi')),
+    KACTANE < 1,
+
+    gecmisNot(NUMARA, DERSKODU, NOT),
+    write('Ogrencinin Gecmis Ders Bilgileri: '),
+    write('---------- '), (NOT == -1 -> writeln('Ogrenci Dersi Ilk Defa Aliyor') ; write('Onceki Notu: '), write(NOT), (NOT >= 50 -> writeln(', Ogrenci Dersten Gecti') ; writeln(', Ogrenci Dersten Kaldi'), retract(ogrenciDers(NUMARA, DERSKODU, _)))),
+    not(NOT >= 50),
+
+    ortalamaBul(NUMARA, GNO),
+    write('Ogrencinin Genel Not Ortalamasi: '),write(GNO),
+    write(' -------- Ortalama: '), (GNO >= 50 -> writeln('Yeterli') ; writeln('Yetersiz')),
+    GNO >= 50,
+
+    kayitliOgrenciSayisi(DERSKODU, KAYITLIOGRENCI),
+    write('Dersi Alan Ogrenci Sayisi: '), write(KAYITLIOGRENCI),
+    write(' --------------- Kontenjan: '), (KAYITLIOGRENCI < 5 -> writeln('Var') ; writeln('Yok')),
+    KAYITLIOGRENCI < 5,
+
+    aldigiDersSayisi(NUMARA, DERSSAYISI),
+    write('Ogrencinin Aldigi Secmeli Ders Sayisi: '), write(DERSSAYISI),
+    write(' --- Program: '), (DERSSAYISI < 2 -> writeln('Bos') ; writeln('Dolu')),
+    DERSSAYISI < 2,
+
+    %write('Ogrenci Notunu Giriniz: '),
+    %read(PUAN),
+    %assertz(ogrenciDers(NUMARA,DERSKODU,PUAN)),
+    assertz(ogrenciDers(NUMARA,DERSKODU,0)),
+    writeln('Ders Alindi.').
+
+
 secmeliDersAc(DERSKODU):-
     kayitliOgrenciSayisi(DERSKODU, KAYITLIOGRENCI),
-    write('Dersi Alan Ogrenci Sayisi: '), write(KAYITLIOGRENCI), write(' --------------- Acilma Durumu: '), (KAYITLIOGRENCI > 2 -> writeln('Acilabilir') ; writeln('Yeterli Sayida Ogrenci Yok')), KAYITLIOGRENCI > 2.
+    write('Dersi Alan Ogrenci Sayisi: '), write(KAYITLIOGRENCI),
+    write(' --------------- Acilma Durumu: '), (KAYITLIOGRENCI > 2 -> writeln('Acilabilir') ; writeln('Yeterli Sayida Ogrenci Yok')),
+    KAYITLIOGRENCI > 2.
     
 
-bolumEslestir(NUMARA, DERSKODU, OGRBOLUM, SDERSBOLUM):-
-    ogrenci(NUMARA, _, OGRBOLUM),
-    secmeliDers(SDERSBOLUM, DERSKODU, _, _).
 
 gecmisNot(NUMARA, DERSKODU, NOT):-
     findall(X, (ogrenciDers(NUMARA, DERSKODU, X)), SONUC),
@@ -164,7 +204,7 @@ ortalamaBul(NUMARA, GNO):-
     sum_list(SONUC2, SECMELIDERSAGIRLIKLINOT),
     findall(Z, (ogrenciDers(NUMARA, DERSKODU, _), bolumDers(_, DERSKODU, _, DERSKREDISI), Z is DERSKREDISI), SONUC3),
     sum_list(SONUC3, BOLUMDERSKREDI),
-    findall(Q, (ogrenciDers(NUMARA, DERSKODU, _), secmeliDers(_, DERSKODU, _, DERSKREDISI), Q is DERSKREDISI), SONUC4),
+    findall(Q, (ogrenciDers(NUMARA, DERSKODU, NOT), secmeliDers(_, DERSKODU, _, DERSKREDISI), NOT > 0, Q is DERSKREDISI), SONUC4),
     sum_list(SONUC4, SECMELIDERSKREDI),
     GNO is (BOLUMDERSAGIRLIKLINOT+SECMELIDERSAGIRLIKLINOT)/(BOLUMDERSKREDI+SECMELIDERSKREDI).
 
@@ -176,3 +216,9 @@ aldigiDersSayisi(NUMARA, DERSSAYISI):-
     findall(_, (ogrenciDers(NUMARA, DERSKODU, _), secmeliDers(_, DERSKODU, _, _)), SONUC),
     length(SONUC, DERSSAYISI).
 
+list_length([], 0).
+list_length([_|Xs], L) :- list_length(Xs,N) , L is N+1 .
+
+kendiBolumundenDersSayisi(NUMARA, DERSKODU, KACTANE):-
+    findall(_, (ogrenci(NUMARA,_,OGRBOLUM), secmeliDers(SDERSBOLUM, DERSKODU, _, _), OGRBOLUM==SDERSBOLUM), SONUC ),
+    list_length(SONUC, KACTANE).
